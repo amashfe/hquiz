@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happiness Hub</title>
+    <style>
+        
+        body { 
+            font-family: Arial, sans-serif; 
+            text-align: center; 
+            background-color: #add8f6;
+            transition: background 0.5s ease-in-out;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        h1 { 
+            color: #ff6347;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            position: relative;
+        }
+        h1::before, h1::after {
+            content: '✨';
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5em;
+        }
+        h1::before { left: -40px; }
+        h1::after { right: -40px; }
+        
+        .container { 
+            max-width: 800px; 
+            margin: auto; 
+            padding: 20px;
+            flex: 1;
+            margin-left: auto;
+            margin-right: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .side-panel {
+            width: 200px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        .side-panel.right {
+            right: 0;
+        }
+        .side-panel.left {
+            left: 0;
+        }
+
+        p1 { 
+            color:#28a745; 
+            font-family: Verdana, sans-serif; 
+            font-size: large;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        } 
+        
+        .activity {
+            background: #fff3cd;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-size: 1.2em;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+            width: 80%;
+            text-align: center;
+            border: 2px solid transparent;
+            /* cursor: pointer; */
+        }
+
+        .activity h2 {
+            margin-left: 40px;
+            transition: transform 0.3s ease;
+        }
+
+        .activity::before {
+            content: '🌱';
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5em;
+            transition: all 0.3s ease;
+        }
+
+        .activity:hover {
+            background: #ffeb99;
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            border-color: #28a745;
+        }
+
+        .activity:hover::before {
+            transform: translateY(-50%) rotate(15deg) scale(1.2);
+        }
+
+        .activity:hover h2 {
+            transform: scale(1.05);
+            color: #28a745;
+        }
+
+        .activity p {
+            display: none;
+            font-size: 1em;
+            margin-top: 10px;
+            color: #333;
+            transition: opacity 0.3s ease;
+            opacity: 0;
+        }
+
+        .activity:hover p {
+            display: block;
+            opacity: 1;
+            animation: fadeIn 0.3s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .btn {
+            background: #28a745;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 20px auto;
+            transition: background 0.3s;
+            font-size: 1.1em;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            display: block;
+        }
+
+        .btn:hover { 
+            background: #218838;
+            transform: translateY(-2px);
+        }
+
+        footer { 
+            margin-top: 20px; 
+            font-size: 0.8em; 
+            color: #555;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        #randomTip {
+            font-size: 1.2em;
+            margin: 20px auto;
+            color: #28a745;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            width: 80%;
+        }
+
+        .quote-box {
+            background: #fff;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            font-style: italic;
+            position: relative;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            /* cursor: pointer; */
+            padding-bottom: 35px;
+        }
+
+        .quote-box::before {
+            content: '"';
+            font-size: 3em;
+            color: #28a745;
+            position: absolute;
+            left: 10px;
+            top: -10px;
+            transition: all 0.3s ease;
+        }
+
+        .quote-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+            background: #f8f9fa;
+            border-color: #28a745;
+        }
+
+        .quote-box:hover::before {
+            color: #218838;
+            transform: scale(1.1) rotate(-5deg);
+        }
+
+        .quote-author {
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+            position: absolute;
+            bottom: 10px;
+            left: 20px;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        .quote-box:hover .quote-author {
+            color: #28a745;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .side-menu {
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .dropdown-button {
+            width: 90%;
+            margin: 15px auto;
+          padding: 5px 1px; 
+            border-radius: 8px;
+            border: 2px solid #28a745;
+            background: linear-gradient(145deg, #ffffff, #f0f0f0);
+            font-size: 1.1em;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            /* left: 50%; */
+            /* transform: translateX(-50%); */
+        }
+
+        .dropdown-button:hover {
+            border-color: #218838;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            /* transform: translateY(-2px); */
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            width: 100%;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            z-index: 1000;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .dropdown-content.show {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.1em;
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-item:hover {
+            background: linear-gradient(145deg, #f8f9fa, #e9ecef);
+            color: #28a745;
+            padding-left: 20px;
+        }
+
+        .dropdown-item.selected {
+            background: linear-gradient(145deg, #28a745, #218838);
+            color: white;
+        }
+
+        .dropdown-arrow {
+            transition: transform 0.3s ease;
+        }
+
+        .dropdown-arrow.rotate {
+            transform: rotate(180deg);
+        }
+
+        .decoration {
+            position: fixed;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .decoration.top-left {
+            top: 20px;
+            left: 20px;
+            font-size: 2em;
+            transform: rotate(-15deg);
+        }
+
+        .decoration.bottom-right {
+            bottom: 20px;
+            right: 20px;
+            font-size: 2em;
+            transform: rotate(15deg);
+        }
+    </style>
+</head>
+<body>
+    <div class="decoration top-left">🌺</div>
+    <div class="decoration bottom-right">🌸</div>
+
+    <div class="side-panel left">
+        <h3>Explore Happiness</h3>
+        <div class="side-menu">
+            <div class="dropdown-button width="100%" onclick="toggleDropdown()">
+                <span id="selected-option">✨Choose an activity </span>
+                <span class="dropdown-arrow">▼</span>
+            </div>
+            <div class="dropdown-content" id="dropdown-content">
+                <div class="dropdown-item" data-value="daily-challenge" onclick="selectOption(this)">
+                    🎯 Daily Happiness Challenge
+                </div>
+                <div class="dropdown-item" data-value="meditation" onclick="selectOption(this)">
+                    🧘 Guided Meditation
+                </div>
+                <div class="dropdown-item" data-value="journal" onclick="selectOption(this)">
+                    📝 Happiness Journal
+                </div>
+                <div class="dropdown-item" data-value="community" onclick="selectOption(this)">
+                    👥 Join Happiness Community
+                </div>
+                <div class="dropdown-item" data-value="resources" onclick="selectOption(this)">
+                    📚 Happiness Resources
+                </div>
+                <div class="dropdown-item" data-value="events" onclick="selectOption(this)">
+                    🎉 Upcoming Events
+                </div>
+            </div>
+        </div>
+        <h3>Daily Inspiration</h3>
+        <div class="quote-box">
+            "Happiness is not something ready made. It comes from your own actions."
+            <div class="quote-author">- Dalai Lama</div>
+        </div>
+        <div class="quote-box">
+            "The only way to do great work is to love what you do."
+            <div class="quote-author">- Steve Jobs</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Welcome to the Happiness Hub</h1>
+        <p1>Here you can learn all about tips to become happier in life.</p1>
+        <div class="activity" id="gratitude">
+            <h2>Practice Gratitude</h2>
+            <p>Write down three things you're grateful for every morning.</p>
+        </div>
+        
+        <div class="activity" id="exercise">
+            <h2>Exercise Daily</h2>
+            <p>Go for a walk, dance, or do yoga to boost your mood.</p>
+        </div>
+        
+        <div class="activity" id="connect">
+            <h2>Connect with Loved Ones</h2>
+            <p>Spend quality time with family and friends to enhance happiness.</p>
+        </div>
+        
+        <div class="activity" id="hobby">
+            <h2>Engage in a Hobby</h2>
+            <p>Try painting, playing music, or reading to spark joy.</p>
+        </div>
+        
+        <button id="getTipButton" class="btn" onclick="showRandomTip()">Get a Random Happiness Tip</button>
+        
+        <div id="randomTip"></div>
+        
+        <footer>
+            <p>&copy; 2025 Happiness Hub. Spread joy every day!</p>
+        </footer>
+    </div>
+
+    <div class="side-panel right">
+        <h3>More Happiness Quotes</h3>
+        <div class="quote-box">
+            "Happiness is not in the mere possession of money; it lies in the joy of achievement."
+            <div class="quote-author">- Franklin D. Roosevelt</div>
+        </div>
+        <div class="quote-box">
+            "The greatest happiness you can have is knowing that you do not necessarily require happiness."
+            <div class="quote-author">- William Saroyan</div>
+        </div>
+        <div class="quote-box">
+            "Happiness is when what you think, what you say, and what you do are in harmony."
+            <div class="quote-author">- Mahatma Gandhi</div>
+        </div>
+    </div>
+   
+    <script>
+        const tips = [
+            "Smile more often—it boosts your mood!",
+            "Listen to your favorite music and relax.",
+            "Take deep breaths to reduce stress.",
+            "Help someone today, and you'll feel happier too!",
+            "Spend time in nature to refresh your mind.",
+            "Stay hydrated and eat healthy for better energy levels!",
+            "Start your day with gratitude—it's a game-changer.",
+            "Make time for a hobby you enjoy, it relieves stress.",
+            "Practice mindfulness: focus on the present moment.",
+            "Set small, achievable goals to build confidence.",
+            "Laugh—it's good for your body and mind!",
+            "Surround yourself with positive people who lift you up.",
+            "Be kind to yourself—self-compassion is key to happiness.",
+            "Take a break from social media for a mental refresh.",
+            "Try journaling your thoughts and feelings for clarity.",
+            "Declutter your space—it can help declutter your mind.",
+            "Give someone a genuine compliment today.",
+            "Take a walk outside—fresh air and nature do wonders!",
+            "Dance like no one's watching—express yourself!",
+            "Focus on progress, not perfection.",
+            "Limit negative self-talk, and be your own biggest cheerleader.",
+            "Learn to say 'no'—protect your energy and time.",
+            "Meditate for a few minutes every day to calm your mind.",
+            "Do something kind for a stranger, it will lift your spirits.",
+            "Celebrate small wins to keep motivation high.",
+            "Practice deep breathing exercises to reduce anxiety.",
+            "Challenge yourself to try something new and exciting.",
+            "Spend quality time with loved ones—build strong relationships.",
+            "Take a power nap to refresh your energy.",
+            "Volunteer or help someone in need—giving back feels good.",
+            "Unplug for a few hours and enjoy some offline time.",
+            "Start each morning with positive affirmations.",
+            "Drink a glass of water to stay hydrated and feel energized.",
+            "Let go of what you cannot control—focus on the present.",
+            "Set boundaries to maintain a healthy work-life balance.",
+            "Focus on your strengths and what you do well.",
+            "Give yourself a treat—you deserve it!",
+            "Practice forgiveness—let go of grudges and find peace.",
+            "Look for the silver lining in challenging situations.",
+            "Surround yourself with things that bring you joy.",
+            "Take a moment to appreciate the beauty around you.",
+            "Do a random act of kindness every day.",
+            "Laugh at your mistakes—they are part of growing.",
+            "Focus on experiences, not material possessions.",
+            "Celebrate other people's successes and be happy for them.",
+            "Spend time with pets—they bring unconditional joy.",
+            "Travel to new places and explore new perspectives.",
+            "Practice gratitude—every day is a gift.",
+            "Let go of perfectionism and embrace imperfection.",
+            "Take a few minutes each day to stretch and relax your body.",
+            "Look for the beauty in the little things in life.",
+            "Remember that happiness is a journey, not a destination.",
+            "Be patient with yourself—growth takes time.",
+            "Embrace challenges as opportunities to grow and learn.",
+            "Let go of negative thoughts and focus on positive ones.",
+            "Be open to new ideas and experiences—they can bring happiness.",
+            "Find joy in helping others and giving back to the community.",
+            "Take time to rest and recharge—it's essential for well-being.",
+            "Practice mindfulness in everyday activities, like eating or walking.",
+            "Forgive yourself—you're doing the best you can.",
+            "Take pride in your achievements, no matter how small.",
+            "Surround yourself with inspiring and uplifting content.",
+            "Create a positive environment in your home and workspace.",
+            "Set realistic expectations for yourself and others.",
+            "Spend time in silence—it can be deeply refreshing.",
+            "Find humor in life's challenges and learn to laugh at them.",
+            "Remember that it's okay to ask for help when you need it.",
+            "Take time to reflect on your accomplishments and growth.",
+            "Be kind to others—it often comes back to you in unexpected ways.",
+            "Allow yourself to take breaks and enjoy moments of peace.",
+            "Spend time with people who make you feel happy and valued.",
+            "Focus on what you can control, and let go of the rest.",
+            "Believe in yourself—you are capable of achieving your dreams.",
+            "Treat yourself to a peaceful moment, like a cup of tea or a good book.",
+            "Let go of comparison—focus on your own journey.",
+            "Remember that it's okay to feel down sometimes—it's part of life.",
+            "Nurture your body—get enough sleep, eat well, and stay active.",
+            "Start a new creative project—express your ideas and passions.",
+            "Be open to feedback—it helps you grow and improve.",
+            "Focus on positive thoughts and affirmations throughout the day.",
+            "Stay present and enjoy the moment, rather than worrying about the future.",
+            "Take time to recharge by doing nothing for a little while.",
+            "Give yourself credit for all the hard work you've done so far.",
+            "Embrace your uniqueness and celebrate what makes you different.",
+            "Enjoy the journey and don't rush the process of growth.",
+            "Take joy in the simple pleasures—like a warm cup of coffee.",
+            "Trust the process and know that everything happens for a reason."
+        ];
+
+        function showRandomTip() {
+            document.getElementById("getTipButton").disabled = true;
+            const randomIndex = Math.floor(Math.random() * tips.length);
+            document.getElementById("randomTip").innerText = tips[randomIndex];
+        }
+
+        function toggleDropdown() {
+            const dropdown = document.getElementById('dropdown-content');
+            const arrow = document.querySelector('.dropdown-arrow');
+            dropdown.classList.toggle('show');
+            arrow.classList.toggle('rotate');
+        }
+
+        // Close dropdown when clicking outside
+        window.onclick = function(event) {
+            const dropdownButton = event.target.closest('.dropdown-button');
+            const dropdownContent = event.target.closest('.dropdown-content');
+            const dropdown = document.getElementById('dropdown-content');
+            const arrow = document.querySelector('.dropdown-arrow');
+            
+            if (!dropdownButton && !dropdownContent) {
+                dropdown.classList.remove('show');
+                arrow.classList.remove('rotate');
+            }
+        }
+
+        function selectOption(element) {
+            const value = element.getAttribute('data-value');
+            const text = element.textContent.trim();
+            
+            // Update selected option
+            document.getElementById('selected-option').textContent = text;
+            
+            // Close dropdown
+            document.getElementById('dropdown-content').classList.remove('show');
+            document.querySelector('.dropdown-arrow').classList.remove('rotate');
+            
+            // Handle different actions based on selection
+            switch(value) {
+                case 'daily-challenge':
+                    showDailyChallenge();
+                    break;
+                case 'meditation':
+                    startMeditation();
+                    break;
+                case 'journal':
+                    openJournal();
+                    break;
+                case 'community':
+                    joinCommunity();
+                    break;
+                case 'resources':
+                    showResources();
+                    break;
+                case 'events':
+                    showEvents();
+                    break;
+            }
+        }
+
+        function showDailyChallenge() {
+            const challenges = [
+                "Smile at 3 strangers today",
+                "Write down 5 things you're grateful for",
+                "Do 10 minutes of mindful breathing",
+                "Call a friend you haven't talked to in a while",
+                "Try a new healthy recipe"
+            ];
+            const randomChallenge = challenges[Math.floor(Math.random() * challenges.length)];
+            const tip = document.getElementById('randomTip');
+            tip.innerHTML = `<strong>Today's Challenge:</strong><br>${randomChallenge}`;
+            tip.style.backgroundColor = '#fff3cd';
+            tip.style.padding = '15px';
+            tip.style.borderRadius = '8px';
+            tip.style.boxShadow = '0 2px 5px rgba(0,0,0,0.1)';
+            tip.style.animation = 'fadeIn 0.3s ease forwards';
+        }
+
+        function startMeditation() {
+            const tip = document.getElementById('randomTip');
+            tip.innerHTML = `
+                <div style="background: #e8f5e9; padding: 20px; border-radius: 8px; text-align: center;">
+                    <h3 style="color: #28a745;">🧘 2-Minute Breathing Exercise</h3>
+                    <p id="meditation-timer" style="font-size: 1.5em; margin: 15px 0;">2:00</p>
+                    <button onclick="toggleMeditation()" id="meditation-btn" class="btn" style="margin: 10px auto;">Start</button>
+                    <p style="font-size: 0.9em; color: #666;">Breathe in for 4 seconds, hold for 4, breathe out for 4</p>
+                </div>
+            `;
+        }
+
+        let meditationInterval;
+        function toggleMeditation() {
+            const timerDisplay = document.getElementById('meditation-timer');
+            const btn = document.getElementById('meditation-btn');
+            
+            if (btn.textContent === 'Start') {
+                let timeLeft = 120; // 2 minutes in seconds
+                btn.textContent = 'Stop';
+                btn.style.backgroundColor = '#dc3545';
+                
+                meditationInterval = setInterval(() => {
+                    timeLeft--;
+                    const minutes = Math.floor(timeLeft / 60);
+                    const seconds = timeLeft % 60;
+                    timerDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                    
+                    if (timeLeft <= 0) {
+                        clearInterval(meditationInterval);
+                        btn.textContent = 'Start';
+                        btn.style.backgroundColor = '#28a745';
+                        timerDisplay.textContent = '2:00';
+                    }
+                }, 1000);
+            } else {
+                clearInterval(meditationInterval);
+                btn.textContent = 'Start';
+                btn.style.backgroundColor = '#28a745';
+                timerDisplay.textContent = '2:00';
+            }
+        }
+
+        function openJournal() {
+            const tip = document.getElementById('randomTip');
+            tip.innerHTML = `
+                <div style="background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                    <h3 style="color: #28a745;">📝 Happiness Journal</h3>
+                    <textarea 
+                        placeholder="Write about what made you happy today..." 
+                        style="width: 100%; height: 150px;  margin: 10px 0; border: 1px solid #ddd; border-radius: 4px; resize: none;"
+                    ></textarea>
+                    <button onclick="saveJournalEntry()" class="btn">Save Entry</button>
+                </div>
+            `;
+        }
+
+        function saveJournalEntry() {
+            alert('Journal entry saved! Keep tracking your happiness journey! 🌟');
+            document.querySelector('textarea').value = '';
+        }
+
+        function joinCommunity() {
+            const tip = document.getElementById('randomTip');
+            tip.innerHTML = `
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; text-align: center;">
+                    <h3 style="color: #28a745;">👥 Join Our Community</h3>
+                    <p>We Will Be Launching Our Community Soon! Stay Tuned!</p>
+                    <div style="display: flex; justify-content: center; gap: 10px; margin-top: 15px;">
+                    </div>
+                </div>
+            `;
+        }
+
+        function showResources() {
+            const tip = document.getElementById('randomTip');
+            tip.innerHTML = `
+            <div style="background: #fff; padding: 20px; border-radius: 8px;">
+                <h3 style="color: #28a745;">📚 Happiness Resources</h3>
+                <ul style="list-style-type: none; padding: 0; text-align: left;">
+                    <li style="margin: 10px 0;">📖 Recommended Books</li>
+                    <ul style="list-style-type: none; padding-left: 20px; display: flex; flex-wrap: wrap; gap: 30px; justify-content: center;">
+                        <li style="margin: 0;">
+                            <a href="https://openlibrary.org/works/OL16045198W/The_power_of_now" target="_blank" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; color: #333; padding: 15px; border-radius: 12px; transition: all 0.3s ease; width: 180px; height: 280px; background: linear-gradient(145deg, #ffffff, #f0f7ff);">
+                                <img src="https://i.pinimg.com/736x/ca/dc/a6/cadca6f57db4e8093861e3b403928407.jpg" alt="The Power of Now" style="width: 120px; height: 180px; margin-bottom: 12px; border-radius: 8px; transition: transform 0.3s ease; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                                <span style="transition: all 0.3s ease; text-align: center; font-size: 1em; font-weight: 500;">The Power of Now</span>
+                                <span style="transition: all 0.3s ease; text-align: center; font-size: 0.9em; font-style: italic; margin-top: auto;">-Eckhart Tolle</span>
+                            </a>
+                        </li>
+                        <li style="margin: 0;">
+                            <a href="https://openlibrary.org/works/OL318761W/The_art_of_happiness" target="_blank" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; color: #333; padding: 15px; border-radius: 12px; transition: all 0.3s ease; width: 180px; height: 280px; background: linear-gradient(145deg, #ffffff, #fff0f7);">
+                                <img src="https://ia600502.us.archive.org/view_archive.php?archive=/17/items/olcovers82/olcovers82-L.zip&file=823994-L.jpg" alt="The Art of Happiness" style="width: 120px; height: 180px; margin-bottom: 12px; border-radius: 8px; transition: transform 0.3s ease; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                                <span style="transition: all 0.3s ease; text-align: center; font-size: 1em; font-weight: 500;">The Art of Happiness</span>
+                                <span style="transition: all 0.3s ease; text-align: center; font-size: 0.9em; font-style: italic; margin-top: auto;">-Dalai Lama and Howard C. Cutler</span>
+                            </a>
+                        </li>
+                        <li style="margin: 0;">
+                            <a href="https://openlibrary.org/works/OL5838498W/The_happiness_project" target="_blank" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; color: #333; padding: 15px; border-radius: 12px; transition: all 0.3s ease; width: 180px; height: 280px; background: linear-gradient(145deg, #ffffff, #f0fff7);">
+                                <img src="https://i.pinimg.com/736x/07/b1/c6/07b1c6a751f1b2e2bc07b8ff1b8300be.jpg" alt="The Happiness Project" style="width: 120px; height: 180px; margin-bottom: 12px; border-radius: 8px; transition: transform 0.3s ease; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                                <span style="transition: all 0.3s ease; text-align: center; font-size: 1em; font-weight: 500;">The Happiness Project</span>
+                                <span style="transition: all 0.3s ease; text-align: center; font-size: 0.9em; font-style: italic; margin-top: auto;">-Gretchen Rubin</span>
+                            </a>
+                        </li>
+                        <li style="margin: 0;">
+                            <a href="https://openlibrary.org/works/OL15840192W/Stumbling_on_happiness" target="_blank" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; color: #333; padding: 15px; border-radius: 12px; transition: all 0.3s ease; width: 180px; height: 280px; background: linear-gradient(145deg, #ffffff, #fff7f0);">
+                                <img src="https://ia800801.us.archive.org/view_archive.php?archive=/17/items/olcovers680/olcovers680-L.zip&file=6803663-L.jpg" alt="Stumbling on Happiness" style="width: 120px; height: 180px; margin-bottom: 12px; border-radius: 8px; transition: transform 0.3s ease; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                                <span style="transition: all 0.3s ease; text-align: center; font-size: 1em; font-weight: 500;">Stumbling on Happiness</span>
+                                <span style="transition: all 0.3s ease; text-align: center; font-size: 0.9em; font-style: italic; margin-top: auto;">-Daniel Todd Gilbert</span>
+                            </a>
+                        </li>
+                        <li style="margin: 0;">
+                            <a href="https://openlibrary.org/works/OL27203W/The_Four_Agreements" target="_blank" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; color: #333; padding: 15px; border-radius: 12px; transition: all 0.3s ease; width: 180px; height: 280px; background: linear-gradient(145deg, #ffffff, #f7f0ff);">
+                                <img src="https://i.pinimg.com/736x/c2/25/cd/c225cda276eeb1335c6f17254751ec12.jpg" alt="The Four Agreements" style="width: 120px; height: 180px; margin-bottom: 12px; border-radius: 8px; transition: transform 0.3s ease; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                                <span style="transition: all 0.3s ease; text-align: center; font-size: 1em; font-weight: 500;">The Four Agreements</span>
+                                <span style="transition: all 0.3s ease; text-align: center; font-size: 0.9em; font-style: italic; margin-top: auto;">-Don Miguel Ruiz</span>
+                            </a>
+                        </li>
+                    </ul>
+
+
+                    <li style="margin: 10px 0;">🎧 Happiness Podcasts</li>
+                        <ul style="list-style-type: none; padding-left: 20px; display: flex; flex-wrap: wrap; gap: 30px; justify-content: center;">
+                            <li style="margin: 0;">
+                                <a href="https://www.youtube.com/watch?v=-O9j0Hnw7NA&list=LL&index=2" target="_blank" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; color: #333; padding: 15px; border-radius: 12px; transition: all 0.3s ease; width: 180px; height: 200px; background: linear-gradient(145deg, #ffffff, #f0f7ff);">
+                                    <img src="https://i.pinimg.com/736x/5a/28/5f/5a285fcf795b6347d82d13f30913fe77.jpg" alt="Logo of Calm" style="width: 120px; height: 150px; margin-bottom: 12px; border-radius: 8px; transition: transform 0.3s ease; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                                <span style="transition: all 0.3s ease; text-align: center; font-size: 1em; font-weight: 500;">DON'T FALL FOR THIS TRICK!!</span>
+                                
+                                </a>
+                             </li>
+                             
+                             <li style="margin: 0;">
+                                <a href="https://www.youtube.com/watch?v=vSQjk9jKarg" target="_blank" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; color: #333; padding: 15px; border-radius: 12px; transition: all 0.3s ease; width: 180px; height: 200px; background: linear-gradient(145deg, #ffffff, #f0f7ff);">
+                                    <img src="https://i.pinimg.com/736x/24/86/4f/24864fa604c48845ee9e64ebc6441c3c.jpg" alt="Logo of Calm" style="width: 120px; height: 150px; margin-bottom: 12px; border-radius: 8px; transition: transform 0.3s ease; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                                    <span style="transition: all 0.3s ease; text-align: center; font-size: 1em; font-weight: 500;">What was revealed after the longest study on happiness?</span>
+                                
+                                </a>
+                             </li>
+                        </ul>
+
+
+                    <li style="margin: 10px 0;">📱 Wellness Apps</li>
+                     <ul style="list-style-type: none; padding-left: 20px; display: flex; flex-wrap: wrap; gap: 30px; justify-content: center;">
+                        <li style="margin: 0;">
+                            <a href="https://www.calm.com" target="_blank" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; color: #333; padding: 15px; border-radius: 12px; transition: all 0.3s ease; width: 180px; height: 180px; background: linear-gradient(145deg, #ffffff, #f0f7ff);">
+                                <img src="https://i.pinimg.com/736x/a4/dc/18/a4dc18a73b89aee3cb47e27d643e0e3c.jpg" alt="Logo of Calm" style="width: 120px; height: 150px; margin-bottom: 12px; border-radius: 8px; transition: transform 0.3s ease; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                                <span style="transition: all 0.3s ease; text-align: center; font-size: 1em; font-weight: 500;">Calm</span>
+                                
+                            </a>
+                        </li>
+                        <li style="margin: 0;">
+                            <a href="https://www.headspace.com" target="_blank" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; color: #333; padding: 15px; border-radius: 12px; transition: all 0.3s ease; width: 180px; height: 180px; background: linear-gradient(145deg, #ffffff, #fff0f7);">
+                                <img src="https://images.ctfassets.net/v3n26e09qg2r/7CSyedyArzTd5GP9LiuL78/f5a303f777ee3691a8ddfd5d36a7d591/headspace-logo.svg" alt="Logo of HeadSpace" style="width: 120px; height: 150px; margin-bottom: 12px; border-radius: 8px; transition: transform 0.3s ease; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                                <span style="transition: all 0.3s ease; text-align: center; font-size: 1em; font-weight: 500;">Headspace</span>
+                                
+                            </a>
+                        </li>
+                        <li style="margin: 0;">
+                            <a href=" https://www.myfitnesspal.com" target="_blank" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; color: #333; padding: 15px; border-radius: 12px; transition: all 0.3s ease; width: 180px; height: 180px; background: linear-gradient(145deg, #ffffff, #f0fff7);">
+                                <img src="https://i.pinimg.com/736x/e0/fb/9c/e0fb9cebb4cedc845194bcc374f0b329.jpg" alt="Logo of MyFitnessPal" style="width: 120px; height: 150px; margin-bottom: 12px; border-radius: 8px; transition: transform 0.3s ease; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                                <span style="transition: all 0.3s ease; text-align: center; font-size: 1em; font-weight: 500;">MyFitnessPal</span>
+                                
+                            </a>
+                        </li>
+                        <li style="margin: 0;">
+                            <a href=" https://www.nike.com/ntc-app" target="_blank" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; color: #333; padding: 15px; border-radius: 12px; transition: all 0.3s ease; width: 180px; height: 180px; background: linear-gradient(145deg, #ffffff, #fff7f0);">
+                                <img src="https://i.pinimg.com/736x/32/96/a5/3296a58935966edca61c624c1f9ae308.jpg" alt="Logo of Nike Training Club" style="width: 120px; height: 150px; margin-bottom: 12px; border-radius: 8px; transition: transform 0.3s ease; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                                <span style="transition: all 0.3s ease; text-align: center; font-size: 1em; font-weight: 500;">Nike Training Club</span>
+                                
+                            </a>
+                        </li>
+                        <li style="margin: 0;">
+                            <a href="https://www.fitbit.com" target="_blank" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; color: #333; padding: 15px; border-radius: 12px; transition: all 0.3s ease; width: 180px; height: 180px; background: linear-gradient(145deg, #ffffff, #f7f0ff);">
+                                <img src="https://i.pinimg.com/736x/92/f6/db/92f6db779cd7424d0220c7dc0534012c.jpg" alt="Logo of Fitbit" style="width: 120px; height: 150px; margin-bottom: 12px; border-radius: 8px; transition: transform 0.3s ease; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                                <span style="transition: all 0.3s ease; text-align: center; font-size: 1em; font-weight: 500;">Fitbit</span>
+                                
+                            </a>
+                        </li>
+                    </ul>
+                </ul>
+            </div>
+            `;
+
+            // Update hover effects
+            const bookLinks = tip.querySelectorAll('a');
+            bookLinks.forEach(link => {
+                link.addEventListener('mouseover', () => {
+                    link.style.backgroundColor = '#ffffff';
+                    link.style.transform = 'translateY(-8px)';
+                    link.style.boxShadow = '0 8px 16px rgba(0,0,0,0.1)';
+                    link.querySelector('img').style.transform = 'scale(1.05)';
+                    link.querySelector('span').style.color = '#28a745';
+                });
+                
+                link.addEventListener('mouseout', () => {
+                    link.style.backgroundColor = link.getAttribute('style').match(/background: linear-gradient[^;]+/)[0];
+                    link.style.transform = 'translateY(0)';
+                    link.style.boxShadow = 'none';
+                    link.querySelector('img').style.transform = 'scale(1)';
+                    link.querySelector('span').style.color = '#333';
+                });
+            });
+        }
+
+        function showEvents() {
+            const tip = document.getElementById('randomTip');
+            tip.innerHTML = `
+                <div style="background: #fff; padding: 20px; border-radius: 8px;">
+                    <h3 style="color: #28a745;">🎉 Upcoming Events</h3>
+                    <div style="text-align: left;">
+                        <p>📅 We will keep you updated on our events and workshops. <br>Until then, stay happy and healthy!</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function scrollToSection(sectionId) {
+            if (sectionId) {
+                const element = document.getElementById(sectionId);
+                if (element) {
+                    element.scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    // Handle new sections that don't exist yet
+                    alert("Coming soon! This feature will be available in our next update.");
+                }
+            }
+        }
+    </script>
+</body>
+</html>
